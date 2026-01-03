@@ -25,6 +25,7 @@ export default function KansaDai8kaiYearPage({
   const [examData, setExamData] = useState<ExamData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [enlargedImage, setEnlargedImage] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +46,26 @@ export default function KansaDai8kaiYearPage({
 
     fetchData()
   }, [year])
+
+  useEffect(() => {
+    // 画像拡大モーダル用のグローバル関数を定義
+    ;(window as any).openImageModal = (src: string) => {
+      setEnlargedImage(src)
+    }
+
+    // ESCキーでモーダルを閉じる
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && enlargedImage) {
+        setEnlargedImage(null)
+      }
+    }
+
+    window.addEventListener('keydown', handleEscape)
+    return () => {
+      window.removeEventListener('keydown', handleEscape)
+      delete (window as any).openImageModal
+    }
+  }, [enlargedImage])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -231,8 +252,8 @@ export default function KansaDai8kaiYearPage({
                             const protectedTags: Array<{ placeholder: string, tag: string }> = []
                             let tagIndex = 0
                             
-                            // 許可されたタグを保護
-                            html = html.replace(/<(\/?)(u|strong|b|em|i|span|img)(\s+[^>]*)?>/g, (match) => {
+                            // 許可されたタグを保護（imgタグは自己終了タグも含む）
+                            html = html.replace(/<(\/?)(u|strong|b|em|i|span|img)(\s+[^>]*)?(\/?)>/g, (match) => {
                               const placeholder = `___PROTECTED_TAG_${tagIndex++}___`
                               protectedTags.push({ placeholder, tag: match })
                               return placeholder
@@ -247,6 +268,25 @@ export default function KansaDai8kaiYearPage({
                             // 保護したタグを元に戻す
                             protectedTags.forEach(({ placeholder, tag }) => {
                               html = html.replace(placeholder, tag)
+                            })
+                            
+                            // imgタグにスタイルとクリックイベントを追加
+                            html = html.replace(/<img([^>]*)>/g, (match, attributes) => {
+                              // 既存のstyle属性を確認
+                              const styleMatch = attributes.match(/style="([^"]*)"/)
+                              let style = 'max-width: 100%; height: auto; cursor: pointer; display: block; margin: 20px auto; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s;'
+                              
+                              if (styleMatch) {
+                                // 既存のstyleがある場合は追加
+                                style = styleMatch[1] + '; ' + style
+                                attributes = attributes.replace(/style="[^"]*"/, '')
+                              }
+                              
+                              // src属性から画像パスを取得
+                              const srcMatch = attributes.match(/src="([^"]*)"/)
+                              const src = srcMatch ? srcMatch[1] : ''
+                              
+                              return `<img${attributes} style="${style}" onclick="window.openImageModal('${src}')" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" />`
                             })
                             
                             return html
@@ -269,6 +309,75 @@ export default function KansaDai8kaiYearPage({
           </article>
         </div>
       </main>
+
+      {/* 画像拡大モーダル */}
+      {enlargedImage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            zIndex: 10000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            padding: '20px'
+          }}
+          onClick={() => setEnlargedImage(null)}
+        >
+          <div
+            style={{
+              position: 'relative',
+              maxWidth: '90%',
+              maxHeight: '90%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={enlargedImage}
+              alt="拡大画像"
+              style={{
+                maxWidth: '100%',
+                maxHeight: '90vh',
+                height: 'auto',
+                borderRadius: '8px',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
+              }}
+            />
+            <button
+              onClick={() => setEnlargedImage(null)}
+              style={{
+                position: 'absolute',
+                top: '-40px',
+                right: '0',
+                background: 'rgba(255, 255, 255, 0.9)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                fontSize: '24px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 'bold',
+                color: '#333',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+              }}
+              aria-label="閉じる"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
 
       <footer className="footer">
         <div className="container">
