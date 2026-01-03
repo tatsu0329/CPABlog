@@ -153,3 +153,4 @@ const sanitizedHtml = DOMPurify.sanitize(q.question.replace(/\\n/g, '<br />'), {
 4. **色付き**: `<span style="color: red;">テキスト</span>` - 空欄番号などを強調
 
 これらを組み合わせることで、問題文を効果的に表現できます。
+
