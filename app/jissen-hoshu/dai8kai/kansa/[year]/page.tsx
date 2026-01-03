@@ -217,99 +217,36 @@ export default function KansaDai8kaiYearPage({
                         style={{ 
                           marginBottom: '15px', 
                           lineHeight: '1.8',
-                          wordBreak: 'break-word'
+                          wordBreak: 'break-word',
+                          whiteSpace: 'pre-wrap'
                         }}
                         dangerouslySetInnerHTML={{
                           __html: (() => {
                             let html = q.question
-                            // まず許可されたHTMLタグを一時的に保護
-                            const tags: string[] = []
-                            const placeholders: string[] = []
                             
-                            // 許可されたタグを一時的に置き換え
+                            // まず&をエスケープ
                             html = html.replace(/&/g, '&amp;')
-                            html = html.replace(/<u>/g, (match) => {
-                              const placeholder = `__TAG_U_START_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<\/u>/g, (match) => {
-                              const placeholder = `__TAG_U_END_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<strong>/g, (match) => {
-                              const placeholder = `__TAG_STRONG_START_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<\/strong>/g, (match) => {
-                              const placeholder = `__TAG_STRONG_END_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<b>/g, (match) => {
-                              const placeholder = `__TAG_B_START_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<\/b>/g, (match) => {
-                              const placeholder = `__TAG_B_END_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<em>/g, (match) => {
-                              const placeholder = `__TAG_EM_START_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<\/em>/g, (match) => {
-                              const placeholder = `__TAG_EM_END_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<i>/g, (match) => {
-                              const placeholder = `__TAG_I_START_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<\/i>/g, (match) => {
-                              const placeholder = `__TAG_I_END_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<span style="([^"]*)">/g, (match, style) => {
-                              const placeholder = `__TAG_SPAN_START_${tags.length}__`
-                              tags.push(`<span style="${style}">`)
-                              placeholders.push(placeholder)
-                              return placeholder
-                            })
-                            html = html.replace(/<\/span>/g, (match) => {
-                              const placeholder = `__TAG_SPAN_END_${tags.length}__`
-                              tags.push(match)
-                              placeholders.push(placeholder)
+                            
+                            // 許可されたHTMLタグを一時的に保護（プレースホルダーに置き換え）
+                            const protectedTags: Array<{ placeholder: string, tag: string }> = []
+                            let tagIndex = 0
+                            
+                            // 許可されたタグを保護
+                            html = html.replace(/<(\/?)(u|strong|b|em|i|span|img)(\s+[^>]*)?>/g, (match) => {
+                              const placeholder = `___PROTECTED_TAG_${tagIndex++}___`
+                              protectedTags.push({ placeholder, tag: match })
                               return placeholder
                             })
                             
-                            // 残りのタグをエスケープ
+                            // すべての<と>をエスケープ（保護されたタグ以外）
                             html = html.replace(/</g, '&lt;').replace(/>/g, '&gt;')
                             
                             // 改行を<br />に変換
                             html = html.replace(/\\n/g, '<br />')
                             
-                            // 保護したタグを戻す
-                            placeholders.forEach((placeholder, index) => {
-                              html = html.replace(placeholder, tags[index])
+                            // 保護したタグを元に戻す
+                            protectedTags.forEach(({ placeholder, tag }) => {
+                              html = html.replace(placeholder, tag)
                             })
                             
                             return html
