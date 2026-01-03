@@ -34,6 +34,8 @@ export default function KansaDai8kaiYearPage({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null)
+  const [selectedChoices, setSelectedChoices] = useState<Record<number, string | string[]>>({})
+  const [showAnswers, setShowAnswers] = useState<Record<number, boolean>>({})
 
   useEffect(() => {
     const fetchData = async () => {
@@ -312,8 +314,23 @@ export default function KansaDai8kaiYearPage({
                             {q.choices.map((choice, choiceIndex) => {
                               // 通常の選択肢の場合
                               if ('text' in choice) {
+                                const isSelected = selectedChoices[index] === choice.label
                                 return (
-                                  <div key={choiceIndex} className="choice-item">
+                                  <div 
+                                    key={choiceIndex} 
+                                    className={`choice-item ${isSelected ? 'choice-item-selected' : ''}`}
+                                    onClick={() => {
+                                      setSelectedChoices(prev => ({
+                                        ...prev,
+                                        [index]: choice.label
+                                      }))
+                                      setShowAnswers(prev => ({
+                                        ...prev,
+                                        [index]: true
+                                      }))
+                                    }}
+                                    style={{ cursor: 'pointer' }}
+                                  >
                                     <strong>{choice.label}：</strong>
                                     <span>{choice.text}</span>
                                   </div>
@@ -321,17 +338,42 @@ export default function KansaDai8kaiYearPage({
                               }
                               // サブ選択肢がある場合（例：No.6）
                               if ('subChoices' in choice && choice.subChoices) {
+                                const currentSelections = Array.isArray(selectedChoices[index]) 
+                                  ? selectedChoices[index] as string[]
+                                  : []
                                 return (
                                   <div key={choiceIndex} style={{ marginBottom: '15px' }}>
                                     <h6 style={{ color: 'var(--text-color)', marginBottom: '8px', fontWeight: '600' }}>
                                       {choice.label}
                                     </h6>
-                                    {choice.subChoices.map((subChoice, subIndex) => (
-                                      <div key={subIndex} className="choice-item">
-                                        <strong>{subChoice.label}：</strong>
-                                        <span>{subChoice.text}</span>
-                                      </div>
-                                    ))}
+                                    {choice.subChoices.map((subChoice, subIndex) => {
+                                      const isSelected = currentSelections.includes(subChoice.label)
+                                      return (
+                                        <div 
+                                          key={subIndex} 
+                                          className={`choice-item ${isSelected ? 'choice-item-selected' : ''}`}
+                                          onClick={() => {
+                                            const newSelections = isSelected
+                                              ? currentSelections.filter(l => l !== subChoice.label)
+                                              : [...currentSelections, subChoice.label]
+                                            setSelectedChoices(prev => ({
+                                              ...prev,
+                                              [index]: newSelections
+                                            }))
+                                            if (newSelections.length > 0) {
+                                              setShowAnswers(prev => ({
+                                                ...prev,
+                                                [index]: true
+                                              }))
+                                            }
+                                          }}
+                                          style={{ cursor: 'pointer' }}
+                                        >
+                                          <strong>{subChoice.label}：</strong>
+                                          <span>{subChoice.text}</span>
+                                        </div>
+                                      )
+                                    })}
                                   </div>
                                 )
                               }
@@ -341,8 +383,107 @@ export default function KansaDai8kaiYearPage({
                         </div>
                       )}
                       
-                      {/* 解答の表示 */}
-                      {q.answer && (
+                      {/* 解答の表示（選択後に表示） */}
+                      {showAnswers[index] && q.answer && (
+                        <div style={{ marginTop: '20px', marginBottom: '15px', padding: '15px', backgroundColor: '#e8f5e9', borderRadius: '6px', borderLeft: '4px solid #4caf50' }}>
+                          <h5 style={{ color: '#2e7d32', marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>
+                            解答
+                          </h5>
+                          <div style={{ color: 'var(--text-color)', lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
+                            {q.answer}
+                          </div>
+                          {/* 正解・不正解の判定表示 */}
+                          {selectedChoices[index] && (
+                            <div style={{ marginTop: '10px', padding: '10px', borderRadius: '4px', backgroundColor: 'white' }}>
+                              {(() => {
+                                const selected = selectedChoices[index]
+                                if (!q.answer) return null
+                                
+                                // 答えから正解のラベルを抽出（「イ、カ、キ」のような形式に対応）
+                                const answerText = q.answer.trim()
+                                const correctLabels = answerText.split(/[、,]/).map(a => a.trim().replace(/[()（）]/g, ''))
+                                
+                                // 選択されたラベルを配列に変換
+                                const selectedLabels = Array.isArray(selected) ? selected : [selected]
+                                
+                                // 正解判定：選択されたラベルが正解と一致するか
+                                const selectedSorted = [...selectedLabels].sort().join('、')
+                                const correctSorted = [...correctLabels].sort().join('、')
+                                const isCorrect = selectedSorted === correctSorted
+                                
+                                return (
+                                  <div style={{ 
+                                    color: isCorrect ? '#2e7d32' : '#c62828',
+                                    fontWeight: '600',
+                                    fontSize: '1rem'
+                                  }}>
+                                    {isCorrect ? '✓ 正解です！' : '✗ 不正解です'}
+                                    <div style={{ 
+                                      fontSize: '0.9rem', 
+                                      color: 'var(--text-light)', 
+                                      marginTop: '5px',
+                                      fontWeight: 'normal'
+                                    }}>
+                                      あなたの回答: {selectedLabels.join('、')}
+                                    </div>
+                                  </div>
+                                )
+                              })()}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* 解説の表示（選択後に表示） */}
+                      {showAnswers[index] && q.explanation && (
+                        <div style={{ marginTop: '20px', marginBottom: '15px', padding: '15px', backgroundColor: '#fff3e0', borderRadius: '6px', borderLeft: '4px solid #ff9800' }}>
+                          <h5 style={{ color: '#e65100', marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>
+                            解説
+                          </h5>
+                          <div 
+                            style={{ 
+                              color: 'var(--text-color)', 
+                              lineHeight: '1.8', 
+                              whiteSpace: 'pre-wrap',
+                              wordBreak: 'break-word'
+                            }}
+                            dangerouslySetInnerHTML={{
+                              __html: (() => {
+                                let html = q.explanation || ''
+                                
+                                // まず&をエスケープ
+                                html = html.replace(/&/g, '&amp;')
+                                
+                                // 許可されたHTMLタグを一時的に保護
+                                const protectedTags: Array<{ placeholder: string, tag: string }> = []
+                                let tagIndex = 0
+                                
+                                html = html.replace(/<(\/?)(u|strong|b|em|i|span|img)(\s+[^>]*)?(\/?)>/g, (match) => {
+                                  const placeholder = `___PROTECTED_TAG_${tagIndex++}___`
+                                  protectedTags.push({ placeholder, tag: match })
+                                  return placeholder
+                                })
+                                
+                                // すべての<と>をエスケープ
+                                html = html.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                                
+                                // 改行を<br />に変換
+                                html = html.replace(/\\n/g, '<br />')
+                                
+                                // 保護したタグを元に戻す
+                                protectedTags.forEach(({ placeholder, tag }) => {
+                                  html = html.replace(placeholder, tag)
+                                })
+                                
+                                return html
+                              })()
+                            }}
+                          />
+                        </div>
+                      )}
+                      
+                      {/* 選択肢がない問題は常に解答と解説を表示 */}
+                      {!q.choices && q.answer && (
                         <div style={{ marginTop: '20px', marginBottom: '15px', padding: '15px', backgroundColor: '#e8f5e9', borderRadius: '6px', borderLeft: '4px solid #4caf50' }}>
                           <h5 style={{ color: '#2e7d32', marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>
                             解答
@@ -353,8 +494,7 @@ export default function KansaDai8kaiYearPage({
                         </div>
                       )}
                       
-                      {/* 解説の表示 */}
-                      {q.explanation && (
+                      {!q.choices && q.explanation && (
                         <div style={{ marginTop: '20px', marginBottom: '15px', padding: '15px', backgroundColor: '#fff3e0', borderRadius: '6px', borderLeft: '4px solid #ff9800' }}>
                           <h5 style={{ color: '#e65100', marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>
                             解説

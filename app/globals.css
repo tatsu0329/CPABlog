@@ -712,6 +712,16 @@ html {
     color: var(--text-color);
 }
 
+.choice-item-selected {
+    background-color: #e3f2fd !important;
+    border-color: var(--primary-color) !important;
+    border-width: 2px !important;
+}
+
+.choice-item-selected strong {
+    color: var(--primary-color);
+}
+
 @media (max-width: 768px) {
     .subject-detail-grid {
         grid-template-columns: 1fr;
