@@ -339,6 +339,27 @@ export default function ShuryoPage() {
                 </ul>
               </div>
 
+              <div className="detail-section">
+                <h3>関連情報</h3>
+                <div className="exam-info-box highlight">
+                  <h4>実務補習第8回考査</h4>
+                  <p>
+                    実務補習の過程で実施される第8回考査についての情報です。
+                    修了考査への準備として重要な考査となります。
+                  </p>
+                  <div style={{ marginTop: '15px' }}>
+                    <Link href="/jissen-hoshu/dai8kai" style={{ 
+                      color: 'var(--primary-color)', 
+                      textDecoration: 'none', 
+                      fontWeight: '600',
+                      fontSize: '1.1rem'
+                    }}>
+                      実務補習第8回考査の詳細を見る →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
               <div className="exam-info-box highlight" style={{ marginTop: '30px' }}>
                 <p style={{ margin: 0 }}>
                   <Link href="/study-guide/shuryo" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontWeight: '600' }}>
