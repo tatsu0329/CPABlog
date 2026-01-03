@@ -3,9 +3,17 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
+type Choice = {
+  label: string
+  text: string
+}
+
 type QuestionData = {
   id: string
   question: string
+  choices?: Choice[] | Array<{ label: string; subChoices?: Choice[] }> | null
+  answer?: string | null
+  explanation?: string | null
 }
 
 type ExamData = {
@@ -293,6 +301,105 @@ export default function KansaDai8kaiYearPage({
                           })()
                         }}
                       />
+                      
+                      {/* 選択肢の表示 */}
+                      {q.choices && q.choices.length > 0 && (
+                        <div style={{ marginTop: '20px', marginBottom: '15px' }}>
+                          <h5 style={{ color: 'var(--primary-color)', marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>
+                            選択肢
+                          </h5>
+                          <div className="question-choices">
+                            {q.choices.map((choice, choiceIndex) => {
+                              // 通常の選択肢の場合
+                              if ('text' in choice) {
+                                return (
+                                  <div key={choiceIndex} className="choice-item">
+                                    <strong>{choice.label}：</strong>
+                                    <span>{choice.text}</span>
+                                  </div>
+                                )
+                              }
+                              // サブ選択肢がある場合（例：No.6）
+                              if ('subChoices' in choice && choice.subChoices) {
+                                return (
+                                  <div key={choiceIndex} style={{ marginBottom: '15px' }}>
+                                    <h6 style={{ color: 'var(--text-color)', marginBottom: '8px', fontWeight: '600' }}>
+                                      {choice.label}
+                                    </h6>
+                                    {choice.subChoices.map((subChoice, subIndex) => (
+                                      <div key={subIndex} className="choice-item">
+                                        <strong>{subChoice.label}：</strong>
+                                        <span>{subChoice.text}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )
+                              }
+                              return null
+                            })}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* 解答の表示 */}
+                      {q.answer && (
+                        <div style={{ marginTop: '20px', marginBottom: '15px', padding: '15px', backgroundColor: '#e8f5e9', borderRadius: '6px', borderLeft: '4px solid #4caf50' }}>
+                          <h5 style={{ color: '#2e7d32', marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>
+                            解答
+                          </h5>
+                          <div style={{ color: 'var(--text-color)', lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
+                            {q.answer}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* 解説の表示 */}
+                      {q.explanation && (
+                        <div style={{ marginTop: '20px', marginBottom: '15px', padding: '15px', backgroundColor: '#fff3e0', borderRadius: '6px', borderLeft: '4px solid #ff9800' }}>
+                          <h5 style={{ color: '#e65100', marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>
+                            解説
+                          </h5>
+                          <div 
+                            style={{ 
+                              color: 'var(--text-color)', 
+                              lineHeight: '1.8', 
+                              whiteSpace: 'pre-wrap',
+                              wordBreak: 'break-word'
+                            }}
+                            dangerouslySetInnerHTML={{
+                              __html: (() => {
+                                let html = q.explanation || ''
+                                
+                                // まず&をエスケープ
+                                html = html.replace(/&/g, '&amp;')
+                                
+                                // 許可されたHTMLタグを一時的に保護
+                                const protectedTags: Array<{ placeholder: string, tag: string }> = []
+                                let tagIndex = 0
+                                
+                                html = html.replace(/<(\/?)(u|strong|b|em|i|span|img)(\s+[^>]*)?(\/?)>/g, (match) => {
+                                  const placeholder = `___PROTECTED_TAG_${tagIndex++}___`
+                                  protectedTags.push({ placeholder, tag: match })
+                                  return placeholder
+                                })
+                                
+                                // すべての<と>をエスケープ
+                                html = html.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                                
+                                // 改行を<br />に変換
+                                html = html.replace(/\\n/g, '<br />')
+                                
+                                // 保護したタグを元に戻す
+                                protectedTags.forEach(({ placeholder, tag }) => {
+                                  html = html.replace(placeholder, tag)
+                                })
+                                
+                                return html
+                              })()
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

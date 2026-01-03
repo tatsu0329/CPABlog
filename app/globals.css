@@ -681,6 +681,37 @@ html {
     gap: 15px;
 }
 
+/* 問題選択肢スタイル */
+.question-choices {
+    margin-top: 10px;
+}
+
+.choice-item {
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    line-height: 1.6;
+    transition: all 0.2s ease;
+}
+
+.choice-item:hover {
+    background-color: var(--bg-light);
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.choice-item strong {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.choice-item span {
+    color: var(--text-color);
+}
+
 @media (max-width: 768px) {
     .subject-detail-grid {
         grid-template-columns: 1fr;
