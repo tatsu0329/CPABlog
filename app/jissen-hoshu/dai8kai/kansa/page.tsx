@@ -9,8 +9,8 @@ export default function KansaDai8kaiListPage() {
   // 利用可能な年度のリスト（JSONファイルが追加されたら、ここに年度を追加）
   const availableYears = [
     { year: 2025, date: "2025年3月16日（日）実施" },
+    { year: 2024, date: "2024年3月17日（日）実施" },
     // 他の年度を追加する場合は、ここに追加
-    // { year: 2024, date: "2024年3月17日（日）実施" },
     // { year: 2023, date: "2023年3月19日（日）実施" },
   ]
 
@@ -144,6 +144,7 @@ export default function KansaDai8kaiListPage() {
     </>
   )
 }
+
 
 
 
