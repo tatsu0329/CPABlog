@@ -103,8 +103,8 @@ export default function Home() {
             <li><a href="#ronbun">論文式試験</a></li>
             <li><a href="#shuryo">修了考査</a></li>
             <li><a href="#summary">まとめ</a></li>
-            <li><a href="#other">その他</a></li>
             <li><Link href="/study-guide">対策方法</Link></li>
+            <li><Link href="/other">その他</Link></li>
           </ul>
         </div>
       </nav>
@@ -331,31 +331,6 @@ export default function Home() {
                 <li><a href="https://www.fsa.go.jp/cpaaob/kouninkaikeishi-shiken/information.html" target="_blank" rel="noopener noreferrer">公認会計士・監査審査会</a></li>
                 <li><a href="https://jicpa.or.jp" target="_blank" rel="noopener noreferrer">日本公認会計士協会</a></li>
               </ul>
-            </div>
-          </section>
-
-          {/* その他 */}
-          <section id="other" className="summary-section">
-            <h2>その他</h2>
-            <div className="summary-content">
-              <div className="summary-card">
-                <h3>実務補習第8回考査</h3>
-                <p>
-                  実務補習の過程で実施される第8回考査についての情報です。
-                  実務補習の後期に実施される重要な考査です。
-                </p>
-                <div className="exam-info-box highlight" style={{ marginTop: '20px' }}>
-                  <Link href="/jissen-hoshu/dai8kai" style={{ 
-                    color: 'var(--primary-color)', 
-                    textDecoration: 'none', 
-                    fontWeight: '600',
-                    fontSize: '1.1rem',
-                    display: 'inline-block'
-                  }}>
-                    詳細ページを見る →
-                  </Link>
-                </div>
-              </div>
             </div>
           </section>
         </div>

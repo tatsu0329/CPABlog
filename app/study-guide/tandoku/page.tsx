@@ -61,9 +61,10 @@ export default function TandokuStudyGuidePage() {
           <ul className="nav-menu">
             <li><Link href="/">ホーム</Link></li>
             <li><Link href="/tandoku">短答式試験</Link></li>
-            <li><Link href="/study-guide">対策方法</Link></li>
             <li><Link href="/ronbun">論文式試験</Link></li>
             <li><Link href="/shuryo">修了考査</Link></li>
+            <li><Link href="/study-guide">対策方法</Link></li>
+            <li><Link href="/other">その他</Link></li>
           </ul>
         </div>
       </nav>

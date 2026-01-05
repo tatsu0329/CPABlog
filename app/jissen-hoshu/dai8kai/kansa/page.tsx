@@ -69,8 +69,11 @@ export default function KansaDai8kaiListPage() {
         <div className="container">
           <ul className="nav-menu">
             <li><Link href="/">ホーム</Link></li>
-            <li><Link href="/jissen-hoshu/dai8kai">実務補習第8回考査</Link></li>
+            <li><Link href="/tandoku">短答式試験</Link></li>
+            <li><Link href="/ronbun">論文式試験</Link></li>
             <li><Link href="/shuryo">修了考査</Link></li>
+            <li><Link href="/study-guide">対策方法</Link></li>
+            <li><Link href="/other">その他</Link></li>
           </ul>
         </div>
       </nav>
@@ -110,21 +113,6 @@ export default function KansaDai8kaiListPage() {
                 </div>
               </article>
             ))}
-          </div>
-
-          <div className="exam-info-box highlight" style={{ marginTop: '30px' }}>
-            <h3>データの格納場所</h3>
-            <p>
-              各年度の問題データは以下の場所にJSON形式で格納されています：
-            </p>
-            <div style={{ marginTop: '15px', padding: '15px', backgroundColor: 'white', borderRadius: '6px' }}>
-              <code style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}>
-                /data/jissen-hoshu/dai8kai/kansa/[年度].json
-              </code>
-            </div>
-            <p style={{ marginTop: '15px' }}>
-              例：2025年度の場合 → <code style={{ fontFamily: 'monospace' }}>/data/jissen-hoshu/dai8kai/kansa/2025.json</code>
-            </p>
           </div>
 
           <div className="exam-info-box highlight" style={{ marginTop: '30px' }}>

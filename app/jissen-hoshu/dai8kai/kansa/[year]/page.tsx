@@ -132,7 +132,11 @@ export default function KansaDai8kaiYearPage({
           <div className="container">
             <ul className="nav-menu">
               <li><Link href="/">ホーム</Link></li>
-              <li><Link href="/jissen-hoshu/dai8kai/kansa">問題一覧</Link></li>
+              <li><Link href="/tandoku">短答式試験</Link></li>
+              <li><Link href="/ronbun">論文式試験</Link></li>
+              <li><Link href="/shuryo">修了考査</Link></li>
+              <li><Link href="/study-guide">対策方法</Link></li>
+              <li><Link href="/other">その他</Link></li>
             </ul>
           </div>
         </nav>
@@ -166,7 +170,11 @@ export default function KansaDai8kaiYearPage({
           <div className="container">
             <ul className="nav-menu">
               <li><Link href="/">ホーム</Link></li>
-              <li><Link href="/jissen-hoshu/dai8kai/kansa">問題一覧</Link></li>
+              <li><Link href="/tandoku">短答式試験</Link></li>
+              <li><Link href="/ronbun">論文式試験</Link></li>
+              <li><Link href="/shuryo">修了考査</Link></li>
+              <li><Link href="/study-guide">対策方法</Link></li>
+              <li><Link href="/other">その他</Link></li>
             </ul>
           </div>
         </nav>
@@ -211,8 +219,11 @@ export default function KansaDai8kaiYearPage({
         <div className="container">
           <ul className="nav-menu">
             <li><Link href="/">ホーム</Link></li>
-            <li><Link href="/jissen-hoshu/dai8kai/kansa">問題一覧</Link></li>
-            <li><Link href="/jissen-hoshu/dai8kai">実務補習第8回考査</Link></li>
+            <li><Link href="/tandoku">短答式試験</Link></li>
+            <li><Link href="/ronbun">論文式試験</Link></li>
+            <li><Link href="/shuryo">修了考査</Link></li>
+            <li><Link href="/study-guide">対策方法</Link></li>
+            <li><Link href="/other">その他</Link></li>
           </ul>
         </div>
       </nav>
