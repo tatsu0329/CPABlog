@@ -722,6 +722,25 @@ html {
     color: var(--primary-color);
 }
 
+/* 問題内の画像スタイル */
+.question-content img,
+.explanation-content img {
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.question-content img:hover,
+.explanation-content img:hover {
+    transform: scale(1.02);
+}
+
 @media (max-width: 768px) {
     .subject-detail-grid {
         grid-template-columns: 1fr;

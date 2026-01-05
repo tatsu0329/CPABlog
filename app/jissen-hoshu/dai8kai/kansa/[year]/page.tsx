@@ -307,7 +307,7 @@ export default function KansaDai8kaiYearPage({
                               const srcMatch = attributes.match(/src="([^"]*)"/)
                               const src = srcMatch ? srcMatch[1] : ''
                               
-                              return `<img${attributes} style="${style}" onclick="window.openImageModal('${src}')" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" />`
+                              return `<img${attributes} style="${style}" onclick="window.openImageModal('${src}')" />`
                             })
                             
                             return html

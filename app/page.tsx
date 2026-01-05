@@ -47,14 +47,6 @@ export default function Home() {
 
     window.addEventListener('scroll', handleScroll)
 
-    // スケジュールカードのホバーエフェクト強化
-    const scheduleItems = document.querySelectorAll('.schedule-item')
-    scheduleItems.forEach(item => {
-      item.addEventListener('mouseenter', function() {
-        ;(this as HTMLElement).style.transition = 'all 0.3s ease'
-      })
-    })
-
     // ページ読み込み時のフェードインアニメーション
     const observerOptions = {
       threshold: 0.1,
