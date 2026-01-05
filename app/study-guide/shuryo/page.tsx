@@ -425,6 +425,10 @@ export default function ShuryoStudyGuidePage() {
       <footer className="footer">
         <div className="container">
           <p>&copy; 2025 公認会計士試験ガイド. 最新情報は公式サイトでご確認ください.</p>
+          <p style={{ marginTop: '10px', fontSize: '0.9rem' }}>
+            <Link href="/privacy" style={{ color: 'white', textDecoration: 'underline', marginRight: '20px' }}>プライバシーポリシー</Link>
+            <Link href="/terms" style={{ color: 'white', textDecoration: 'underline' }}>利用規約</Link>
+          </p>
         </div>
       </footer>
     </>
