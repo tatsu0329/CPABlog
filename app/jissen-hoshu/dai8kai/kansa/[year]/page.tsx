@@ -331,14 +331,28 @@ export default function KansaDai8kaiYearPage({
                                     key={choiceIndex} 
                                     className={`choice-item ${isSelected ? 'choice-item-selected' : ''}`}
                                     onClick={() => {
-                                      setSelectedChoices(prev => ({
-                                        ...prev,
-                                        [index]: choice.label
-                                      }))
-                                      setShowAnswers(prev => ({
-                                        ...prev,
-                                        [index]: true
-                                      }))
+                                      if (isSelected) {
+                                        // 選択済みの選択肢を再度クリックした場合は選択を解除
+                                        setSelectedChoices(prev => {
+                                          const newChoices = { ...prev }
+                                          delete newChoices[index]
+                                          return newChoices
+                                        })
+                                        setShowAnswers(prev => ({
+                                          ...prev,
+                                          [index]: false
+                                        }))
+                                      } else {
+                                        // 新しい選択肢を選択（解答はまだ表示しない）
+                                        setSelectedChoices(prev => ({
+                                          ...prev,
+                                          [index]: choice.label
+                                        }))
+                                        setShowAnswers(prev => ({
+                                          ...prev,
+                                          [index]: false
+                                        }))
+                                      }
                                     }}
                                     style={{ cursor: 'pointer' }}
                                   >
@@ -371,12 +385,11 @@ export default function KansaDai8kaiYearPage({
                                               ...prev,
                                               [index]: newSelections
                                             }))
-                                            if (newSelections.length > 0) {
-                                              setShowAnswers(prev => ({
-                                                ...prev,
-                                                [index]: true
-                                              }))
-                                            }
+                                            // 選択があっても解答はまだ表示しない（回答するボタンを表示）
+                                            setShowAnswers(prev => ({
+                                              ...prev,
+                                              [index]: false
+                                            }))
                                           }}
                                           style={{ cursor: 'pointer' }}
                                         >
@@ -393,8 +406,46 @@ export default function KansaDai8kaiYearPage({
                           </div>
                         </div>
                       )}
+
+                      {/* 回答するボタン（選択後、解答表示前に表示） */}
+                      {q.choices && q.choices.length > 0 && selectedChoices[index] && !showAnswers[index] && (
+                        <div style={{ marginTop: '20px', marginBottom: '15px', textAlign: 'center' }}>
+                          <button
+                            onClick={() => {
+                              setShowAnswers(prev => ({
+                                ...prev,
+                                [index]: true
+                              }))
+                            }}
+                            style={{
+                              padding: '12px 32px',
+                              fontSize: '1.1rem',
+                              fontWeight: '600',
+                              color: 'white',
+                              backgroundColor: 'var(--primary-color)',
+                              border: 'none',
+                              borderRadius: '8px',
+                              cursor: 'pointer',
+                              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = 'var(--secondary-color)'
+                              e.currentTarget.style.transform = 'translateY(-2px)'
+                              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'var(--primary-color)'
+                              e.currentTarget.style.transform = 'translateY(0)'
+                              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)'
+                            }}
+                          >
+                            回答する
+                          </button>
+                        </div>
+                      )}
                       
-                      {/* 解答の表示（選択後に表示） */}
+                      {/* 解答の表示（回答するボタンをクリック後に表示） */}
                       {showAnswers[index] && q.answer && (
                         <div style={{ marginTop: '20px', marginBottom: '15px', padding: '15px', backgroundColor: '#e8f5e9', borderRadius: '6px', borderLeft: '4px solid #4caf50' }}>
                           <h5 style={{ color: '#2e7d32', marginBottom: '10px', fontSize: '1.1rem', fontWeight: '600' }}>
