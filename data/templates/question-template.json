@@ -1,0 +1,65 @@
+{
+  "category": {
+    "exam": "監査第8回修了考査"
+  },
+  "questions": [
+    {
+      "id": "No.1",
+      "question": "問題文をここに入力します。\\n改行は \\n で表現します。\\nHTMLタグ（<u>, <strong>など）も使用可能です。",
+      "choices": [
+        {
+          "label": "A",
+          "text": "選択肢Aの内容"
+        },
+        {
+          "label": "B",
+          "text": "選択肢Bの内容"
+        },
+        {
+          "label": "C",
+          "text": "選択肢Cの内容"
+        },
+        {
+          "label": "D",
+          "text": "選択肢Dの内容"
+        }
+      ],
+      "answer": "A",
+      "explanation": "正答の解説をここに入力します。\\n改行は \\n で表現します。\\n各選択肢の解説も含めることができます。"
+    },
+    {
+      "id": "No.2",
+      "question": "複数選択問題の例（choicesが配列の配列の場合）",
+      "choices": [
+        {
+          "label": "1",
+          "subChoices": [
+            {
+              "label": "A",
+              "text": "選択肢1-A"
+            },
+            {
+              "label": "B",
+              "text": "選択肢1-B"
+            }
+          ]
+        },
+        {
+          "label": "2",
+          "subChoices": [
+            {
+              "label": "A",
+              "text": "選択肢2-A"
+            },
+            {
+              "label": "B",
+              "text": "選択肢2-B"
+            }
+          ]
+        }
+      ],
+      "answer": "1A,2B",
+      "explanation": "複数選択問題の解説"
+    }
+  ]
+}
