@@ -26,7 +26,7 @@ data/
 ```json
 {
   "category": {
-    "exam": "監査第8回修了考査"
+    "exam": "監査第8回考査"
   },
   "questions": [
     {
@@ -48,7 +48,7 @@ data/
 ### フィールドの詳細
 
 #### `category`
-- `exam`: 試験の種類（例: "監査第8回修了考査"）
+- `exam`: 試験の種類（例: "監査第8回考査"）
 
 #### `questions` (配列)
 各問題オブジェクトには以下のフィールドがあります：
@@ -137,4 +137,5 @@ JSONファイルが正しい形式か確認する方法：
 - 問題集の追加方法: `HOW_TO_ADD_QUESTIONS.md`
 - 記事の追加方法: `HOW_TO_ADD_ARTICLES.md`
 - テンプレート: `templates/question-template.json`
+
 

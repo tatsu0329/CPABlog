@@ -32,7 +32,7 @@ data/
 ```json
 {
   "category": {
-    "exam": "監査第8回修了考査"
+    "exam": "監査第8回考査"
   },
   "questions": [
     // 問題の配列
@@ -190,3 +190,4 @@ cp data/templates/question-template.json data/jissen-hoshu/dai8kai/kansa/2026.js
 - 問題一覧ページ: `app/jissen-hoshu/dai8kai/kansa/page.tsx`
 - 問題表示ページ: `app/jissen-hoshu/dai8kai/kansa/[year]/page.tsx`
 - API ルート: `app/api/jissen-hoshu/dai8kai/kansa/[year]/route.ts`
+
